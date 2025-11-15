@@ -1,0 +1,150 @@
+#VRML_SIM R2025a utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/robots/gctronic/e-puck/protos/E-puck.proto"
+
+WorldInfo {
+  info [
+    "E-puck robot in an elevator hall simulation."
+    "The robot patrols, detects a blue box in a red area, and triggers an alarm."
+  ]
+  title "Elevator Hall Security Robot"
+}
+Viewpoint {
+  orientation -0.25287237347880215 -0.305068672032332 0.9181441434086626 4.6150521214594225
+  position -0.34432423687342706 2.5987516067567924 1.6983986392903652
+}
+Background {
+  skyColor [
+    0.4 0.7 1
+  ]
+}
+DEF FLOOR Solid {
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+        }
+      }
+      geometry Plane {
+        size 2 2
+      }
+    }
+  ]
+  boundingObject Plane {
+    size 2 2
+  }
+}
+DEF WALL1 Solid {
+  translation 1 0 0.05
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.95 0.95 0.95
+        roughness 0.8
+        metalness 0
+      }
+      geometry Box {
+        size 0.02 2 0.1
+      }
+    }
+  ]
+  name "wall1"
+}
+DEF WALL2 Solid {
+  translation -1 0 0.05
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.95 0.95 0.95
+        roughness 0.8
+        metalness 0
+      }
+      geometry Box {
+        size 0.02 2 0.1
+      }
+    }
+  ]
+  name "wall2"
+}
+DEF WALL3 Solid {
+  translation 0 1 0.05
+  rotation 0 0 1 1.5708
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.95 0.95 0.95
+        roughness 0.8
+        metalness 0
+      }
+      geometry Box {
+        size 0.02 2 0.1
+      }
+    }
+  ]
+  name "wall3"
+}
+DEF WALL4 Solid {
+  translation 0 -1 0.05
+  rotation 0 0 1 1.5708
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.95 0.95 0.95
+        roughness 0.8
+        metalness 0
+      }
+      geometry Box {
+        size 0.02 2 0.1
+      }
+    }
+  ]
+  name "wall4"
+}
+DEF RESTRICTED_AREA Solid {
+  translation -0.6 0 0.001
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 1 0 0
+          emissiveColor 1 0 0
+        }
+      }
+      geometry Box {
+        size 0.5 0.5 0.001
+      }
+    }
+  ]
+  name "restricted area"
+}
+DEF ELECTRIC_VEHICLE Solid {
+  translation -0.6 0 0.025
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0 0 1
+        roughness 0.5
+        metalness 0
+      }
+      geometry Box {
+        size 0.05 0.05 0.05
+      }
+    }
+  ]
+  name "electric vehicle"
+}
+DEF EPUCK E-puck {
+  hidden position_0_0 13212.442787435593
+  hidden position_0_1 12424.047252222625
+  hidden linearVelocity_0 -0.04955552499555055 -0.03815482031432703 2.454006988917286e-05
+  hidden angularVelocity_0 -0.010099380569174246 0.013425502466125491 0.0004479047404000665
+  hidden rotation_1 0 1 0 5.1872717441025715
+  hidden linearVelocity_1 -0.04949882816373127 -0.0380998331519647 -4.90463966995563e-07
+  hidden angularVelocity_1 1.9052040310549034 -2.4747892911084146 -0.0001806003321464232
+  hidden rotation_2 0 -1 0 4.093285378597459
+  hidden linearVelocity_2 -0.04950246385161267 -0.03812751908544012 -1.0633715382492034e-06
+  hidden angularVelocity_2 1.9045267971806688 -2.475310569694572 0.00041051279763453836
+  translation -0.6123145415291817 -0.0904037352028768 -6.77268322417171e-05
+  rotation -0.0002151890457681481 -7.513805472521497e-05 0.9999999740239732 -2.485573744776446
+  controller "epuck_controller"
+}
