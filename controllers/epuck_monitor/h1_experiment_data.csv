@@ -1,0 +1,3 @@
+alarm_num,trigger_time_sec,response_time_ms,previous_state,detection_method,green_pixels
+1,5.408,32.000,MONITORING,CAMERA,23
+2,12.160,32.000,MONITORING,CAMERA,23
