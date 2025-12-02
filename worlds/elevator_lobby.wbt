@@ -1,0 +1,928 @@
+#VRML_SIM R2025a utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/robots/gctronic/e-puck/protos/E-puck.proto"
+
+WorldInfo {
+  info [
+    "Elevator Safety Monitoring System"
+    "EV Detection & Alarm Project"
+  ]
+  title "Elevator Lobby - EV Safety Monitor"
+  basicTimeStep 16
+}
+Viewpoint {
+  orientation 0.06549365046068645 0.05067532981171989 -0.9965653981038108 1.8278715538759218
+  position 4.342459313981233 16.726145499774564 2.9719650349643625
+}
+TexturedBackground {
+  texture "empty_office"
+}
+TexturedBackgroundLight {
+}
+Solid {
+  translation 0 0 -0.01
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.85 0.83 0.8
+        roughness 0.3
+        metalness 0.05
+      }
+      geometry Box {
+        size 10 8 0.02
+      }
+    }
+  ]
+  name "floor"
+  boundingObject Box {
+    size 10 8 0.02
+  }
+}
+DEF RestrictedZone Solid {
+  translation 0 -2.5 0.001
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.8 0.1 0.1
+        transparency 0.3
+        roughness 0.5
+        metalness 0
+      }
+      geometry Box {
+        size 6 2 0.01
+      }
+    }
+  ]
+  name "restricted_zone"
+}
+Solid {
+  translation 0 -1.5 0.002
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 1 0.8 0
+        roughness 0.6
+      }
+      geometry Box {
+        size 6 0.1 0.01
+      }
+    }
+  ]
+  name "warning_stripe"
+}
+Solid {
+  translation 0 -3.9 1.5
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.92 0.9 0.87
+        roughness 0.6
+        metalness 0
+      }
+      geometry Box {
+        size 10 0.2 3
+      }
+    }
+  ]
+  name "back_wall"
+  boundingObject Box {
+    size 10 0.2 3
+  }
+}
+Solid {
+  translation -4.9 0 1.5
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.92 0.9 0.87
+        roughness 0.5
+      }
+      geometry Box {
+        size 0.2 8 3
+      }
+    }
+  ]
+  name "left_wall"
+  boundingObject Box {
+    size 0.2 8 3
+  }
+}
+Solid {
+  translation 4.9 0 1.5
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.92 0.9 0.87
+        roughness 0.5
+      }
+      geometry Box {
+        size 0.2 8 3
+      }
+    }
+  ]
+  name "right_wall"
+  boundingObject Box {
+    size 0.2 8 3
+  }
+}
+Solid {
+  translation 0 0 3
+  children [
+    Shape {
+      appearance PBRAppearance {
+        roughness 0.9
+      }
+      geometry Box {
+        size 10 8 0.05
+      }
+    }
+  ]
+  name "ceiling"
+}
+Solid {
+  translation -1.8 -3.75 1.25
+  children [
+    Solid {
+      translation 0 0 1.15
+      children [
+        Shape {
+          appearance DEF STEEL PBRAppearance {
+            baseColor 0.6 0.62 0.65
+            roughness 0.3
+            metalness 0.8
+          }
+          geometry Box {
+            size 1.6 0.1 0.1
+          }
+        }
+      ]
+      name "frame_top_1"
+    }
+    Solid {
+      translation -0.75 0 0
+      children [
+        Shape {
+          appearance USE STEEL
+          geometry Box {
+            size 0.1 0.1 2.4
+          }
+        }
+      ]
+      name "frame_left_1"
+    }
+    Solid {
+      translation 0.75 0 0
+      children [
+        Shape {
+          appearance USE STEEL
+          geometry Box {
+            size 0.1 0.1 2.4
+          }
+        }
+      ]
+      name "frame_right_1"
+    }
+  ]
+  name "elevator_frame_1"
+  boundingObject Group {
+    children [
+      Pose {
+        translation -0.75 0 0
+        children [
+          Box {
+            size 0.1 0.1 2.4
+          }
+        ]
+      }
+      Pose {
+        translation 0.75 0 0
+        children [
+          Box {
+            size 0.1 0.1 2.4
+          }
+        ]
+      }
+    ]
+  }
+}
+Solid {
+  translation 1.8 -3.75 1.25
+  children [
+    Solid {
+      translation 0 0 1.15
+      children [
+        Shape {
+          appearance USE STEEL
+          geometry Box {
+            size 1.6 0.1 0.1
+          }
+        }
+      ]
+      name "frame_top_2"
+    }
+    Solid {
+      translation -0.75 0 0
+      children [
+        Shape {
+          appearance USE STEEL
+          geometry Box {
+            size 0.1 0.1 2.4
+          }
+        }
+      ]
+      name "frame_left_2"
+    }
+    Solid {
+      translation 0.75 0 0
+      children [
+        Shape {
+          appearance USE STEEL
+          geometry Box {
+            size 0.1 0.1 2.4
+          }
+        }
+      ]
+      name "frame_right_2"
+    }
+  ]
+  name "elevator_frame_2"
+  boundingObject Group {
+    children [
+      Pose {
+        translation -0.75 0 0
+        children [
+          Box {
+            size 0.1 0.1 2.4
+          }
+        ]
+      }
+      Pose {
+        translation 0.75 0 0
+        children [
+          Box {
+            size 0.1 0.1 2.4
+          }
+        ]
+      }
+    ]
+  }
+}
+Robot {
+  translation -2.15 -3.7 1.2
+  children [
+    SliderJoint {
+      jointParameters JointParameters {
+        axis -1 0 0
+      }
+      device [
+        LinearMotor {
+          name "door_motor_1L"
+          maxVelocity 0.5
+          minPosition -0.55
+        }
+      ]
+      endPoint Solid {
+        children [
+          Shape {
+            appearance DEF DOOR_METAL PBRAppearance {
+              baseColor 0.75 0.77 0.8
+              roughness 0.2
+              metalness 0.9
+            }
+            geometry Box {
+              size 0.6 0.05 2.3
+            }
+          }
+        ]
+        boundingObject Box {
+          size 0.6 0.05 2.3
+        }
+        physics Physics {
+          density -1
+          mass 50
+        }
+      }
+    }
+  ]
+  name "elevator1_door_left"
+  controller "<none>"
+}
+Robot {
+  translation -1.45 -3.7 1.2
+  children [
+    SliderJoint {
+      jointParameters JointParameters {
+        axis 1 0 0
+      }
+      device [
+        LinearMotor {
+          name "door_motor_1R"
+          maxVelocity 0.5
+          maxPosition 0.55
+        }
+      ]
+      endPoint Solid {
+        children [
+          Shape {
+            appearance USE DOOR_METAL
+            geometry Box {
+              size 0.6 0.05 2.3
+            }
+          }
+        ]
+        boundingObject Box {
+          size 0.6 0.05 2.3
+        }
+        physics Physics {
+          density -1
+          mass 50
+        }
+      }
+    }
+  ]
+  name "elevator1_door_right"
+  controller "<none>"
+}
+Robot {
+  translation 1.45 -3.7 1.2
+  children [
+    SliderJoint {
+      jointParameters JointParameters {
+        axis -1 0 0
+      }
+      device [
+        LinearMotor {
+          name "door_motor_2L"
+          maxVelocity 0.5
+          minPosition -0.55
+        }
+      ]
+      endPoint Solid {
+        children [
+          Shape {
+            appearance USE DOOR_METAL
+            geometry Box {
+              size 0.6 0.05 2.3
+            }
+          }
+        ]
+        boundingObject Box {
+          size 0.6 0.05 2.3
+        }
+        physics Physics {
+          density -1
+          mass 50
+        }
+      }
+    }
+  ]
+  name "elevator2_door_left"
+  controller "<none>"
+}
+Robot {
+  translation 2.15 -3.7 1.2
+  children [
+    SliderJoint {
+      jointParameters JointParameters {
+        axis 1 0 0
+      }
+      device [
+        LinearMotor {
+          name "door_motor_2R"
+          maxVelocity 0.5
+          maxPosition 0.55
+        }
+      ]
+      endPoint Solid {
+        children [
+          Shape {
+            appearance USE DOOR_METAL
+            geometry Box {
+              size 0.6 0.05 2.3
+            }
+          }
+        ]
+        boundingObject Box {
+          size 0.6 0.05 2.3
+        }
+        physics Physics {
+          density -1
+          mass 50
+        }
+      }
+    }
+  ]
+  name "elevator2_door_right"
+  controller "<none>"
+}
+Solid {
+  translation -1.8 -4.3 1.2
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.2 0.2 0.22
+        roughness 0.5
+      }
+      geometry Box {
+        size 1.4 1 2.4
+      }
+    }
+  ]
+  name "elevator1_interior"
+}
+Solid {
+  translation 1.8 -4.3 1.2
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.2 0.2 0.22
+        roughness 0.5
+      }
+      geometry Box {
+        size 1.4 1 2.4
+      }
+    }
+  ]
+  name "elevator2_interior"
+}
+PointLight {
+  attenuation 0 0 1
+  color 1 0.98 0.95
+  intensity 5
+  location -1.8 -2 2.8
+}
+PointLight {
+  attenuation 0 0 1
+  color 1 0.98 0.95
+  intensity 5
+  location 1.8 -2 2.8
+}
+PointLight {
+  attenuation 0 0 1
+  color 1 0.98 0.95
+  intensity 4
+  location 0 2 2.8
+}
+Solid {
+  translation -1.8 -2 2.95
+  children [
+    Shape {
+      appearance PBRAppearance {
+        emissiveColor 1 0.98 0.9
+      }
+      geometry Box {
+        size 0.6 0.6 0.05
+      }
+    }
+  ]
+  name "light_fixture_1"
+}
+Solid {
+  translation 1.8 -2 2.95
+  children [
+    Shape {
+      appearance PBRAppearance {
+        emissiveColor 1 0.98 0.9
+      }
+      geometry Box {
+        size 0.6 0.6 0.05
+      }
+    }
+  ]
+  name "light_fixture_2"
+}
+Solid {
+  translation 3.5 1 0.25
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.25 0.25 0.28
+        roughness 0.4
+        metalness 0.3
+      }
+      geometry Box {
+        size 0.5 2 0.08
+      }
+    }
+    Solid {
+      translation 0 -0.8 -0.2
+      children [
+        Shape {
+          appearance USE STEEL
+          geometry Box {
+            size 0.4 0.05 0.4
+          }
+        }
+      ]
+      name "leg1"
+    }
+    Solid {
+      translation 0 0.8 -0.2
+      children [
+        Shape {
+          appearance USE STEEL
+          geometry Box {
+            size 0.4 0.05 0.4
+          }
+        }
+      ]
+      name "leg2"
+    }
+  ]
+  name "lobby_bench"
+  boundingObject Box {
+    size 0.5 2 0.5
+  }
+}
+Solid {
+  translation -3.5 2.5 0.35
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.35 0.35 0.38
+        roughness 0.6
+      }
+      geometry Cylinder {
+        height 0.5
+        radius 0.25
+      }
+    }
+    Solid {
+      translation 0 0 0.5
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 0.2 0.5 0.2
+            roughness 0.8
+          }
+          geometry Sphere {
+            radius 0.4
+          }
+        }
+      ]
+      name "foliage"
+    }
+  ]
+  name "plant"
+  boundingObject Cylinder {
+    height 0.5
+    radius 0.25
+  }
+}
+DEF ElectricVehicle Robot {
+  translation -0.5000000037431516 0.9000001103555932 0.12401899999294337
+  rotation -1.620419477726867e-10 -1.6204386283655796e-10 -1 1.570799946389911
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.1 0.6 0.1
+        roughness 0.3
+        metalness 0.4
+      }
+      geometry Box {
+        size 0.6 0.4 0.25
+      }
+    }
+    Solid {
+      translation 0 0 0.2
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 0 1 0
+            emissiveColor 0 1 0
+          }
+          geometry Box {
+            size 0.5 0.35 0.1
+          }
+        }
+      ]
+      name "ev_marker_top"
+    }
+    Solid {
+      translation 0.35 0 0.05
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 0 1 0
+            emissiveColor 0 1 0
+          }
+          geometry Box {
+            size 0.05 0.35 0.2
+          }
+        }
+      ]
+      name "ev_marker_front"
+    }
+    Solid {
+      translation -0.35 0 0.05
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 0 1 0
+            emissiveColor 0 1 0
+          }
+          geometry Box {
+            size 0.05 0.35 0.2
+          }
+        }
+      ]
+      name "ev_marker_back"
+    }
+    Solid {
+      translation 0 0.22 0.05
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 0 1 0
+            emissiveColor 0 1 0
+          }
+          geometry Box {
+            size 0.5 0.05 0.2
+          }
+        }
+      ]
+      name "ev_marker_left"
+    }
+    Solid {
+      translation 0 -0.22 0.05
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 0 1 0
+            emissiveColor 0 1 0
+          }
+          geometry Box {
+            size 0.5 0.05 0.2
+          }
+        }
+      ]
+      name "ev_marker_right"
+    }
+    Solid {
+      translation 0.2 0.22 -0.1
+      rotation 1 0 0 1.5708
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 0.15 0.15 0.15
+            roughness 0.8
+          }
+          geometry Cylinder {
+            height 0.05
+            radius 0.08
+          }
+        }
+      ]
+      name "wheel_fr"
+    }
+    Solid {
+      translation 0.2 -0.22 -0.1
+      rotation 1 0 0 1.5708
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 0.15 0.15 0.15
+            roughness 0.8
+          }
+          geometry Cylinder {
+            height 0.05
+            radius 0.08
+          }
+        }
+      ]
+      name "wheel_fl"
+    }
+    Solid {
+      translation -0.2 0.22 -0.1
+      rotation 1 0 0 1.5708
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 0.15 0.15 0.15
+            roughness 0.8
+          }
+          geometry Cylinder {
+            height 0.05
+            radius 0.08
+          }
+        }
+      ]
+      name "wheel_rr"
+    }
+    Solid {
+      translation -0.2 -0.22 -0.1
+      rotation 1 0 0 1.5708
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 0.15 0.15 0.15
+            roughness 0.8
+          }
+          geometry Cylinder {
+            height 0.05
+            radius 0.08
+          }
+        }
+      ]
+      name "wheel_rl"
+    }
+    Solid {
+      translation 0 0 0.15
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 0.2 0.2 0.8
+            emissiveColor 0.1 0.1 0.4
+          }
+          geometry Box {
+            size 0.3 0.2 0.05
+          }
+        }
+      ]
+      name "battery"
+    }
+  ]
+  name "ElectricVehicle"
+  boundingObject Box {
+    size 0.6 0.4 0.25
+  }
+  physics Physics {
+    density -1
+    mass 5
+  }
+  controller "<none>"
+}
+DEF WallAlarmLight Robot {
+  translation -3.5 -3.5 2.2
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.3 0.3 0.3
+        roughness 0.5
+        metalness 0.8
+      }
+      geometry Box {
+        size 0.3 0.15 0.3
+      }
+    }
+    DEF ALARM_LIGHT_VISUAL Pose {
+      translation 0 0.08 0
+      children [
+        Shape {
+          appearance DEF ALARM_LIGHT_APPEARANCE PBRAppearance {
+            baseColor 0.3 0 0
+            roughness 0.3
+            metalness 0
+          }
+          geometry Sphere {
+            radius 0.1
+          }
+        }
+      ]
+    }
+    PointLight {
+      attenuation 0 0 1
+      color 1 0 0
+      intensity 0
+      location 0 0.15 0
+      radius 5
+    }
+  ]
+  name "wall_alarm_light"
+  controller "<none>"
+}
+DEF PatrolRobot E-puck {
+  hidden position_0_0 -1.326302860106286e-08
+  hidden position_0_1 1.326303308597289e-08
+  translation 3.129999999999999 -1.7199999999999958 -2.7978437631396083e-05
+  rotation -7.573053985398147e-15 1.3995372130263318e-09 1 -3.1415900000000114
+  name "camera_monitor"
+  controller "epuck_fsm_controller"
+  version "2"
+  camera_width 128
+  camera_height 128
+  turretSlot [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.8 0.1 0.1
+        emissiveColor 0.3 0 0
+      }
+      geometry Cylinder {
+        height 0.01
+        radius 0.025
+      }
+    }
+  ]
+}
+DEF VPE_Supervisor Robot {
+  translation 0 0 0.01
+  children [
+    Emitter {
+      channel 1
+    }
+  ]
+  name "vpe_supervisor"
+  controller "vpe_supervisor"
+  supervisor TRUE
+}
+Solid {
+  translation 0 -3.76 0.8
+  children [
+    Shape {
+      appearance PBRAppearance {
+        roughness 0.4
+      }
+      geometry Box {
+        size 1 0.02 0.4
+      }
+    }
+    Solid {
+      translation 0 -0.02 0
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 0.9 0.1 0.1
+            emissiveColor 0.3 0 0
+          }
+          geometry Box {
+            size 0.95 0.01 0.35
+          }
+        }
+      ]
+      name "sign_background"
+    }
+  ]
+  name "warning_sign"
+}
+Solid {
+  translation -1.8 -3.65 2.55
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.1 0.1 0.1
+        emissiveColor 0.8 0.4 0
+      }
+      geometry Box {
+        size 0.3 0.02 0.15
+      }
+    }
+  ]
+  name "elevator1_indicator"
+}
+Solid {
+  translation 1.8 -3.65 2.55
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.1 0.1 0.1
+        emissiveColor 0.8 0.4 0
+      }
+      geometry Box {
+        size 0.3 0.02 0.15
+      }
+    }
+  ]
+  name "elevator2_indicator"
+}
+Solid {
+  translation -2 1.5 0.15
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.5 0.5 0.55
+        roughness 0.6
+      }
+      geometry Cylinder {
+        height 0.3
+        radius 0.15
+      }
+    }
+  ]
+  name "pillar1"
+  boundingObject Cylinder {
+    height 0.3
+    radius 0.15
+  }
+}
+Solid {
+  translation 2 -0.5 0.15
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.5 0.5 0.55
+        roughness 0.6
+      }
+      geometry Cylinder {
+        height 0.3
+        radius 0.15
+      }
+    }
+  ]
+  name "pillar2"
+  boundingObject Cylinder {
+    height 0.3
+    radius 0.15
+  }
+}
