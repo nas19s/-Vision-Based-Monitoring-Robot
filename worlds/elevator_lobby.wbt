@@ -13,8 +13,8 @@ WorldInfo {
   basicTimeStep 16
 }
 Viewpoint {
-  orientation 0.06549365046068645 0.05067532981171989 -0.9965653981038108 1.8278715538759218
-  position 4.342459313981233 16.726145499774564 2.9719650349643625
+  orientation 0.0654562852994306 0.060875001503013525 -0.9959968418156795 1.6472927178383614
+  position 1.1106780991421232 17.11450810276749 3.113630498857253
 }
 TexturedBackground {
   texture "empty_office"
@@ -534,6 +534,119 @@ Solid {
   name "lobby_bench"
   boundingObject Box {
     size 0.5 2 0.5
+  }
+}
+Solid {
+  translation -2 -1 0.15
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.6 0.6 0.6
+        roughness 0.5
+        metalness 0.2
+      }
+      geometry Cylinder {
+        height 0.3
+        radius 0.12
+      }
+    }
+  ]
+  name "obstacle_pillar_1"
+  boundingObject Cylinder {
+    height 0.3
+    radius 0.12
+  }
+  physics Physics {
+    mass 10
+  }
+}
+Solid {
+  translation 2 -1 0.15
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.6 0.6 0.6
+        roughness 0.5
+        metalness 0.2
+      }
+      geometry Cylinder {
+        height 0.3
+        radius 0.12
+      }
+    }
+  ]
+  name "obstacle_pillar_2"
+  boundingObject Cylinder {
+    height 0.3
+    radius 0.12
+  }
+  physics Physics {
+    mass 10
+  }
+}
+Solid {
+  translation 0 -0.5 0.1
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.5 0.4 0.3
+        roughness 0.7
+      }
+      geometry Box {
+        size 0.2 0.2 0.2
+      }
+    }
+  ]
+  name "obstacle_box_1"
+  boundingObject Box {
+    size 0.2 0.2 0.2
+  }
+  physics Physics {
+    mass 2
+  }
+}
+Solid {
+  translation 1 -0.8 0.15
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.55 0.55 0.58
+        roughness 0.5
+        metalness 0.3
+      }
+      geometry Cylinder {
+        height 0.3
+        radius 0.1
+      }
+    }
+  ]
+  name "obstacle_pillar_3"
+  boundingObject Cylinder {
+    height 0.3
+    radius 0.1
+  }
+  physics Physics {
+    mass 8
+  }
+}
+Solid {
+  translation -1 -0.6 0.125
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 1 0.5 0
+        roughness 0.6
+        emissiveColor 0.2 0.1 0
+      }
+      geometry Cone {
+        bottomRadius 0.1
+        height 0.25
+      }
+    }
+  ]
+  name "obstacle_cone_1"
+  physics Physics {
+    mass 1
   }
 }
 Solid {
