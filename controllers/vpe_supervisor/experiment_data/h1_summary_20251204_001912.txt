@@ -1,0 +1,7 @@
+H1 Experiment Summary
+========================================
+
+Experiment ID: 20251204_001912
+Total VPE alarms triggered: 0
+Total cumulative time in restricted zone: 0.00 seconds
+Edge case tests performed: 6

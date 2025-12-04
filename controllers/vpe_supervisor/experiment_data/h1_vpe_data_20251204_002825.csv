@@ -1,0 +1,2 @@
+alarm_num,trigger_time,clear_time,duration_sec,ev_y_position,distance_to_epuck,epuck_state_at_trigger
+1,2.88,5.056,2.176,-1.5000488283116014,3.636657606004692,STOPPED
