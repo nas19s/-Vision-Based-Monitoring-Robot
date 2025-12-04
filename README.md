@@ -1,4 +1,4 @@
-# Elevator Safety Monitoring Robot: A Resilient Reactive System
+# Elevator Safety Monitoring Robot
 
 This is a Webots simulation project aimed at creating a safety system to prevent electric vehicles (EVs) from entering restricted zones near elevators. We built a sophisticated, two-part system focusing on **resilient, high-priority reactive control**, which is crucial because EVs with lithium batteries pose a significant fire risk in enclosed spaces.
 
