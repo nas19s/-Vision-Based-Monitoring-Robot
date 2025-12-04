@@ -300,8 +300,6 @@ Robot {
           size 0.6 0.05 2.3
         }
         physics Physics {
-          density -1
-          mass 50
         }
       }
     }
@@ -336,8 +334,6 @@ Robot {
           size 0.6 0.05 2.3
         }
         physics Physics {
-          density -1
-          mass 50
         }
       }
     }
@@ -372,8 +368,6 @@ Robot {
           size 0.6 0.05 2.3
         }
         physics Physics {
-          density -1
-          mass 50
         }
       }
     }
@@ -408,8 +402,6 @@ Robot {
           size 0.6 0.05 2.3
         }
         physics Physics {
-          density -1
-          mass 50
         }
       }
     }
@@ -557,7 +549,6 @@ Solid {
     radius 0.12
   }
   physics Physics {
-    mass 10
   }
 }
 Solid {
@@ -581,7 +572,6 @@ Solid {
     radius 0.12
   }
   physics Physics {
-    mass 10
   }
 }
 Solid {
@@ -602,7 +592,6 @@ Solid {
     size 0.2 0.2 0.2
   }
   physics Physics {
-    mass 2
   }
 }
 Solid {
@@ -626,7 +615,6 @@ Solid {
     radius 0.1
   }
   physics Physics {
-    mass 8
   }
 }
 Solid {
@@ -645,8 +633,11 @@ Solid {
     }
   ]
   name "obstacle_cone_1"
+  boundingObject Cylinder {
+    height 0.25
+    radius 0.1
+  }
   physics Physics {
-    mass 1
   }
 }
 Solid {
@@ -862,7 +853,6 @@ DEF ElectricVehicle Robot {
     size 0.6 0.4 0.25
   }
   physics Physics {
-    density -1
     mass 5
   }
   controller "<none>"
