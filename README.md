@@ -1,113 +1,96 @@
-# Elevator Safety Monitoring Robot
+# Elevator Safety Monitoring Robot: A Resilient Reactive System
 
-A Webots simulation project where an e-puck robot monitors an elevator lobby for electric vehicles (EVs) entering a restricted zone.
+This is a Webots simulation project aimed at creating a safety system to prevent electric vehicles (EVs) from entering restricted zones near elevators. We built a sophisticated, two-part system focusing on **resilient, high-priority reactive control**, which is crucial because EVs with lithium batteries pose a significant fire risk in enclosed spaces.
 
-## What This Does
-
-We built a safety system that detects when an EV gets too close to elevator doors. This matters because EVs with lithium batteries can be fire hazards in enclosed elevator spaces.
-
-The system uses two detection methods:
-
-- **Camera detection** - spots the green EV marker visually
-- **Zone detection (VPE)** - triggers when EV crosses the boundary line
-
-When either detects a violation, the robot flashes its LEDs and a wall-mounted alarm light goes off.
-
-## Project Structure
-
-- **FinalProject/**
-  - **worlds/**
-    - `elevator_lobby.wbt` – The simulation environment
-  - **controllers/**
-    - **epuck_fsm_controller/**
-      - `epuck_fsm_controller.c` – Robot brain (FSM + camera)
-      - `h1_experiment_data.csv` – Main experiment results
-    - **vpe_supervisor/**
-      - `vpe_supervisor.py` – Zone monitoring + alarm light
-      - **experiment_data/**
-        - `h1_vpe_data_[timestamp].csv` – VPE experiment logs
-  - `README.md`
-
-## How to Run
-
-1. Open `elevator_lobby.wbt` in Webots.
-2. Make sure to Build the 'epuck_fsm_controller.c' file, press the gear icon and then it will automatically create a Makefile, then Reload/Refresh.
-3. Press the **Play** button.
-4. Use arrow keys to move the green EV around.
-5. Watch what happens when it enters the restricted (red) zone!
-
-### Controls
-- **↑↓←→** - Move the EV
-- **R** - Reset EV to start
-- **T** - Test the alarm light
-- **S** - Save experiment data
-- **Q** - Quit and save
-
-## The Robot States
-
-The e-puck uses a simple finite state machine (FSM):
-
-1. **MONITORING** - Watching for the EV (one LED on)
-2. **TARGET_DETECTED** - EV spotted! (half LEDs on)
-3. **ALARM_ACTIVE** - Full alert (all LEDs flashing)
-
-## Viewing the Camera
-
-To see what the robot sees:
-
-1. In the scene tree (left panel), expand `DEF PatrolRobot E-puck`.
-2. Find and double-click `camera`.
-3. A window pops up showing the robot's view.
-
-The camera looks for bright green pixels. When it sees enough, it triggers the alarm.
-
-## Experiment Data
-
-We collect data in two CSV files:
-
-### `h1_experiment_data.csv` (in `epuck_fsm_controller` folder)
-Main results from the robot controller:
-
-| Column | Description |
-|--------|-------------|
-| alarm_num | Which alarm this was (1, 2, 3...) |
-| trigger_time_sec | When it happened |
-| response_time_ms | How fast the robot reacted |
-| previous_state | What the robot was doing before |
-| detection_method | CAMERA or VPE |
-| green_pixels | How many green pixels triggered it |
-
-### `h1_vpe_data_[timestamp].csv` (in `vpe_supervisor/experiment_data` folder)
-Logs from the supervisor tracking EV position and zone violations:
-
-| Column | Description |
-|--------|-------------|
-| alarm_num | Alarm count |
-| trigger_time | When EV entered restricted zone |
-| clear_time | When EV left the zone |
-| duration_sec | How long the violation lasted |
-| ev_y_position | EV's Y coordinate at trigger |
-| epuck_state_at_trigger | Whether robot was moving or stopped |
-
-## Our Hypothesis (H1)
-
-> A high-priority alarm behaviour can reliably suppress lower-priority behaviours and respond within one control cycle (32ms).
-
-**Result:** Confirmed. Looking at `h1_experiment_data.csv`, response times consistently hit 32ms (one timestep). The alarm behaviour successfully overrides monitoring state every time.
-
-## Team
-
-- **Nasrudin A** 
-- **Yousuf H**
-- **Tairui Z** 
-
-
-## Built With
-
-- Webots R2023b
-- C (robot controller)
-- Python (supervisor)
+The e-puck robot acts as a stationary monitor, demonstrating an intelligent, high-priority safety response.
 
 ---
 
+## Project Goal: Redundancy and Speed
 
+Our primary technical challenge was achieving reliable detection and *immediate* reaction, even under noisy conditions. We solved this by implementing two independent detection methods that can each trigger the high-priority alarm:
+
+1.  **Vision Detection (C-Controller):** The e-puck uses its on-board camera to process images and visually identify the EV's bright green safety marker.
+2.  **Zone Monitoring (Python Supervisor):** A supervisor program acts as an authoritative, external position check, verifying if the EV's exact coordinates violate the zone boundary.
+
+If *either* system detects a violation, the robot flashes its LEDs, and an external wall alarm is activated.
+
+---
+
+## Technical Architecture Overview
+
+The true complexity of our work lies in the multi-controller setup, which forced us to integrate two different programming languages and control domains:
+
+* **C Controller (`epuck_fsm_controller.c`):** This runs the e-puck's internal brain. It's responsible for all **real-time sensing (Camera processing)**, the **Finite State Machine (FSM)** logic, and controlling the robot’s actuators (LEDs).
+* **Python Supervisor (`vpe_supervisor.py`):** This program has **supervisor privileges**, allowing it to manipulate the world. It calculates precise coordinates, implements the stabilising **Hysteresis** logic for the boundary, controls the EV's movement, and flashes the **Wall Alarm Light**.
+* **Communication:** We used the Webots **Emitter/Receiver** radio devices (Channel 1) for the Python supervisor to send a quick, authoritative alarm signal to the C controller.
+
+---
+
+## Core Logic and Evaluation
+
+To prove our hypothesis that a high-priority system can respond immediately, we implemented tight control logic and rigorous data logging.
+
+### 1. FSM and Priority Control
+
+The e-puck uses a three-state FSM to manage its response priority. This structure ensures that the alarm can instantly override any lower-priority state.
+
+| State | Purpose | Logic |
+| :--- | :--- | :--- |
+| **MONITORING** | Idle state; robot is simply watching. | Single status LED on. |
+| **TARGET\_DETECTED** | **Confirmation State:** A 96ms delay (3 time steps) to confirm the detection is stable. | Half of the LEDs are lit. |
+| **ALARM\_ACTIVE** | The high-priority state; immediate and persistent until the threat is clear. | All LEDs flash rapidly. |
+
+### 2. Camera Logic (C)
+
+To prevent false alarms from shadows or slightly greenish walls, we engineered a very strict color filter:
+
+* We only accept pixels where the Green channel is **at least twice** the Red and Blue values.
+* The pixel count must exceed a threshold of **20** pixels to be considered a valid detection.
+
+### 3. Edge Case Testing (New)
+
+A key part of our project was testing the system's limitations. We created a special function (`E` key) in the supervisor to automatically run **systematic edge case tests**. This moves the EV to set positions and logs data on the camera's detection reliability at various distances.
+
+---
+
+## Experiment Data & Hypothesis (H1)
+
+Our project tested the following hypothesis:
+
+> A high-priority alarm behaviour triggered by visual or position detection can **reliably** and **rapidly** suppress low-priority monitoring behaviours, enabling a precise response within one control cycle.
+
+Our data logging verifies this conclusion:
+
+| Data Log File | What It Shows | Key Finding |
+| :--- | :--- | :--- |
+| `h1_experiment_data.csv` | **Response Time** | The robot consistently achieved a response time of **$32.000\text{ms}$** (one control step), confirming maximum speed. |
+| `h1_vpe_data_[ts].csv` | **Zone Validation** | Records the precise time and position the EV crossed the boundary, validating the VPE's high reliability. |
+| `h1_edge_cases_[ts].csv` | **Camera Limitations** | Provides the data necessary to analyse the detection range and sensitivity of the Camera logic. |
+
+---
+
+## Running the Simulation
+
+1.  Open `FinalProject/worlds/elevator_lobby.wbt` in **Webots**.
+2.  **Build** the C controller.
+3.  Press **Play** (▶).
+4.  Use the controls below to test the system.
+
+| Key | Function |
+| :--- | :--- |
+| **↑↓←→** | Drive the Electric Vehicle. |
+| **R** | Reset EV to starting position. |
+| **E** | **Run Systematic Edge Case Test** (automated testing). |
+| **T** | Test the wall alarm light. |
+| **S** / **Q** | Save all data logs (S) or Quit and Save (Q). |
+
+---
+
+## Team Contribution Summary
+
+| Member | Focus Area | Key Implementation |
+| :--- | :--- | :--- |
+| **Yousuf H** | Virtual Perception & Environment | `vpe_supervisor.py` (VPE logic, Hysteresis, Emitter, Wall Alarm Light control). |
+| **Tairui Z** | Robot Control & Sensory Processing | `epuck_fsm_controller.c` (C structure, Camera image processing, Color thresholds, LED control). |
+| **Nasrudin A** | Architecture & Evaluation | FSM Design and implementation, creation of **all CSV data logging systems** and the **Edge Case Test** framework. |
