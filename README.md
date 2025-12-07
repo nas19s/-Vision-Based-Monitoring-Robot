@@ -1,101 +1,109 @@
 # Elevator Safety & EV Access Control System
 
-This Webots project simulates an autonomous safety monitoring system for an elevator lobby. We designed this to address the rising fire safety risks associated with lithium-ion batteries in enclosed spaces. The goal is simple on paper but technically complex: **allow humans to use the elevator, but actively block and lock out Electric Vehicles (Green EVs).**
+This Webots project simulates an autonomous safety monitoring system for an elevator lobby. We designed this system to address the specific fire safety risks associated with lithium-ion batteries in enclosed spaces. The goal is simple in concept but technically complex to execute: **allow humans to use the elevator, but actively block and lock out Electric Vehicles (Green EVs).**
 
-Rather than just passively observing, our system implements **active defence behaviours**. We moved beyond simple obstacle avoidance to create a multi-agent system that can visually identify a threat, coordinate an alarm, and physically intercept the target.
+We moved beyond simple "obstacle avoidance" to create a multi-agent system capable of **Feature-Based Recognition**. A key focus of our research was ensuring the robot is "smart" enough to distinguish between a genuine threat (a moving car) and a false positive (a green pillar or wall), solving a common limitation in colour-based robotics.
 
 ---
 
 ## Project Overview: Intelligent Active Defence
 
-Our solution relies on two robots working in tandem with a central building supervisor.
+Our solution relies on two robots working in tandem with a central building supervisor. The core of the project is the **Patrol Robot**, which we engineered to handle real-world uncertainty using a sophisticated vision pipeline.
 
-The core innovation in this iteration is the shift from simple “Colour Thresholding” to **Feature-Based Recognition**. We realised that relying solely on colour was too prone to errors (e.g., detecting a green recycling bin as a car). To fix this, we implemented a **Spatial Context Algorithm** that validates the *structure* of an object before acting.
+1.  **Smart Access Control:**
+    *   **Human/Non-EV:** Authorised. The elevator doors open automatically.
+    *   **Electric Vehicle:** Restricted. The robot locks onto the target and physically intercepts.
+    *   **Green Pillars/Walls:** **IGNORED.** We implemented a validation layer that identifies these as structural elements rather than vehicles, ensuring the robot does not get stuck attacking a wall.
 
-1. **Smart Access Control:**
-   * **Human/Non-EV:** Authorised. The elevator doors open automatically.
-   * **Electric Vehicle:** Restricted. When confirmed, doors lock and the robot intercepts.
-   * **False Positives (e.g., Green Boxes):** **IGNORED.** The robot is smart enough to see that a green box has no wheels, so it ignores it.
-
-2. **Layered Surveillance:**
-   * **The Patrol Robot:** The primary interceptor. It uses geometric validation to confirm a target before switching to “Pursuit Mode.”
-   * **The Stationary Guard:** A fixed camera providing a second angle, ensuring redundancy.
+2.  **Layered Surveillance:**
+    *   **Patrol Robot:** Uses **Braitenberg Vehicle** logic for smooth, organic navigation and a **Finite State Machine** for threat assessment.
+    *   **Stationary Guard:** A fixed camera providing redundant CCTV coverage.
 
 ---
 
 ## Technical Architecture
 
-We implemented the system using three distinct controllers:
+We implemented the system using three distinct controllers, with the bulk of the "intelligence" residing in the patrol unit.
 
 ### 1. The Patrol Robot (`epuck_fsm_controller.c`)
 
-This is the most advanced agent. We built a **Finite State Machine (FSM)** that prioritises visual intelligence over basic navigation.
+This is the primary agent. We implemented a **Finite State Machine (FSM)** integrated with a custom computer vision algorithm written in C.
 
-* **The Vision Algorithm (Spatial Context Validation):**  
-  Instead of just reacting to “Green Pixels,” the robot runs a multi-pass check to determine if an object is actually a vehicle:
+*   **Vision Pipeline: "Spatial Context Validation"**
+    We realised that relying solely on colour thresholding would lead to failure in a real environment. To fix this, we wrote a multi-stage filter:
+    1.  **Chassis Detection:** Identifies the "Centre of Mass" of green pixels.
+    2.  **Wheel Search:** Scans specifically for high-density dark pixels in the lower 30% of the object.
+    3.  **Dynamic Revalidation (The "Force Release" Logic):**
+        This is our key contribution to reliability. The robot continuously re-evaluates the target *during* the pursuit. If the target loses its vehicle characteristics (e.g., if the robot gets closer and realises the object has **Zero Black Pixels**), it triggers a **Force Release**. The robot immediately aborts the pursuit and resumes patrolling.
 
-  1. **Chassis Detection:** Finds the centre of mass of green pixels.  
-  2. **Wheel Search:** Scans the area *specifically below* the green mass for dark, high-density pixel clusters.  
-  3. **Geometric Logic:** Calculates whether the wheels are in the correct position relative to the chassis (i.e., below and to the sides).
+*   **Navigation: Braitenberg Algorithm**
+    For patrol movement, we replaced simple "stop-and-turn" logic with a **Weighted Braitenberg Matrix**. By calculating motor speeds based on a weighted sum of all 8 distance sensors, the robot achieves smooth, curved trajectories around obstacles.
 
-  *Why this was necessary:* This effectively filters out false positives such as green walls or boxes.
-
-* **Control Logic:**
-  * `STATE_VALIDATING`: When potential green is seen, the robot slows down to gather 10 frames of data to confirm the structure.
-  * `STATE_PURSUIT`: Only triggers if the “Vehicle Confidence” score exceeds 60%. It uses a **Proportional Controller** to smooth the intercept trajectory.
-  * `STATE_ALARM_BLOCK`: Physical blocking behaviour upon interception.
+*   **State Machine Logic:**
+    *   `STATE_VALIDATING`: The robot slows down to gather 10 frames of structural data before committing to a chase.
+    *   `STATE_PURSUIT`: Uses **Visual Servoing** (Proportional Control) to steer towards the target.
+    *   `STATE_ALARM_BLOCK`: Physical interception upon contact.
+    *   `STATE_AVOIDING`: A priority interrupt state that handles immediate collision risks before returning the robot to its previous task.
 
 ### 2. The Stationary Guard (`epuck_camera_stationary.c`)
 
-Acting as the “CCTV” of the system, this robot focuses on the elevator entrance.
+Acting as the "CCTV" of the system, this robot focuses on the elevator entrance.
 
-* **Visual Processing:** It acts as a tripwire, analysing the scene for the specific EV colour signature.
-* **Communication:** Upon detection, it broadcasts a radio signal (Channel 2) to the Supervisor. This triggers the **Blue Wall Alarm**, providing a secondary safety layer independent of the patrol robot.
+*   **Visual Processing:** It acts as a tripwire, analysing the scene for the specific EV colour signature.
+*   **Communication:** Upon detection, it broadcasts a radio signal (Channel 2) to the Supervisor to trigger the **Blue Wall Alarm**.
 
 ### 3. The Supervisor (`vpe_supervisor.py`)
 
-This script acts as the “Building Management System.”
+This script acts as the "Building Management System."
 
-* **Door Logic:** It handles the mechanics of the centre-opening elevator doors (Open for Red, Lock for Green).
-* **Zone Alarm:** It monitors absolute GPS coordinates. If an EV crosses the “Safety Line” on the floor, the Red Wall Light triggers immediately.
+*   **Door Logic:** Handles the mechanics of the centre-opening elevator doors (Open for Red, Lock for Green).
+*   **Zone Alarm:** Monitors absolute GPS coordinates to trigger the Red Wall Light if the safety line is crossed.
 
 ---
 
 ## Visual & Logic Guide
 
-We designed the visual feedback to be intuitive during the simulation:
+We designed the visual feedback to be intuitive for testing:
 
 | Component | Visual Indicator | Condition | Result |
 | :--- | :--- | :--- | :--- |
 | **Zone Alarm** | **Red Wall Light** | EV crosses the yellow floor line. | Doors **CLOSE**. |
-| **Active Block** | **Patrol Pursuit** | Robot confirms “Green Chassis + Black Wheels”. | Robot **CHASES**. |
-| **False Positive** | **Patrol Ignores** | Robot sees a Green Box (No wheels). | Robot **IGNORES**. |
+| **Active Block** | **Patrol Pursuit** | Robot confirms Green Chassis + Black Wheels. | Robot **CHASES**. |
+| **Pillar Rejection**| **Pursuit Abort** | Robot chases, sees no wheels (Pillar), and stops. | Robot **RESUMES PATROL**. |
 | **Access Grant** | **Doors Open** | Red Non-EV is in the lobby. | Doors **OPEN**. |
 
 ---
 
 ## Hypothesis Testing & Data Logging
 
-To properly evaluate our main hypothesis (**H1**) — *that adding feature validation reduces false positives without harming reaction time* — we implemented a comprehensive logging system.
+To rigorously evaluate **Hypothesis H1** (that feature validation reduces false positives without ruining reaction time), the system automatically generates detailed CSV logs. This allows us to empirically measure the "intelligence" of the robot.
 
-The code automatically generates two CSV files in the root directory:
+### 1. `patrol_data.csv` (Reaction Metrics)
+Logs the timestamp of every state change and alarm trigger.
+*   **Key Metric:** `Duration` — We use this to measure how long the robot maintained a lock before aborting (for pillars) or blocking (for cars).
 
-| Log File | What it Tracks |
+### 2. `detection_analysis.csv` (Algorithm Internals)
+Logs the frame-by-frame vision data. We track specific metrics to verify the "Pillar Rejection" logic:
+
+| Column | Description |
 | :--- | :--- |
-| `patrol_data.csv` | **Reaction Speed:** Logs the exact timestamp of state changes. We use this to prove the robot can validate and switch to “Pursuit” mode in under 500 ms. |
-| `detection_analysis.csv` | **Algorithm Reliability:** Logs internal vision metrics for every frame (`GreenPixels`, `WheelPixels`, `ConfidenceScore`, and `RejectionReason`). |
+| `GreenPx` | Number of green pixels (Chassis). |
+| `BlackPx` | Number of dark pixels (Wheels). |
+| `ZeroCount` | **Critical:** Tracks consecutive frames with *zero* black pixels. If this hits the threshold (8), the robot aborts. |
+| `PillarCheck` | Internal flag indicating if the logic suspects a pillar. |
+| `Result` | Final Decision: `VEHICLE` vs `REJECTED`. |
 
-**How to verify it works:**  
-Check `detection_analysis.csv` after a run. You will see rows where `Result = REJECTED` and `Reason = Wheels not below chassis`. This proves the robot is making intelligent decisions rather than just reacting to colour.
+**Verification:**
+After a simulation run, checking `detection_analysis.csv` allows us to verify the exact moment the robot decided an object was a "Pillar" and released the lock.
 
 ---
 
 ## Running the Simulation
 
-1. Open `FinalProject/worlds/elevator_lobby.wbt` in **Webots**.  
-2. **Build** both C controllers (`epuck_fsm_controller` and `epuck_camera_stationary`).  
-3. Press **Play** (▶).  
-4. Use the keyboard controls (click inside the 3D view first):
+1.  Open `FinalProject/worlds/elevator_lobby.wbt` in **Webots**.
+2.  **Build** both C controllers (`epuck_fsm_controller` and `epuck_camera_stationary`).
+3.  Press **Play** (▶).
+4.  Use the keyboard controls (click inside the 3D view first):
 
 | Key | Function |
 | :--- | :--- |
@@ -108,9 +116,9 @@ Check `detection_analysis.csv` after a run. You will see rows where `Result = RE
 
 ## Team Contribution
 
-We divided the project according to our individual strengths, ensuring that the vision systems, control logic, and environment behaviour all integrated smoothly.
+We divided the project workload based on our technical strengths to ensure smooth integration between the environment and the robot intelligence:
 
-| Member | Focus Area | Key Contribution |
-|--------|-------------|------------------|
-| **Yousuf H** | **Environment & Supervisor** | **Simulation and System Logic:** Yousuf managed the `vpe_supervisor.py` script, including the door-control logic, zone-based safety triggers, and overall coordination of the elevator system. He also established the initial computer-vision setup and calibration for the stationary camera. |
-| **Nasrudin A** | **Perception & Control** | **Advanced Feature Detection:** Nasrudin implemented the **Spatial Context Validation** algorithm in C, enabling the system to associate the green chassis with wheel structures to reduce false positives. He also built the Proportional Controller for smooth pursuit and developed the CSV logging system used for evaluation. |
+| Member | Focus Area | Key Implementation |
+| :--- | :--- | :--- |
+| **Yousuf H** | **Environment & Supervisor** | **Simulation Logic:**<br>Yousuf managed the `vpe_supervisor.py`, handling the complex door logic and zone alarms. He also established the environment landmarks and calibrated the stationary camera unit to ensure consistent lighting conditions. |
+| **Nasrudin A** | **Perception & Control** | **Advanced Control & Vision:**<br>Nasrudin implemented the **Spatial Context Validation** and **Dynamic Revalidation** algorithms in C (`epuck_fsm_controller.c`). He also designed the **Braitenberg** obstacle avoidance matrix and the CSV logging system for evaluation. |
