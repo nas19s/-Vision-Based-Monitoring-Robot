@@ -102,7 +102,7 @@ After a simulation run, checking `detection_analysis.csv` allows us to verify th
 
 ## Running the Simulation
 
-1.  Open `FinalProject/worlds/elevator_lobby.wbt` in **Webots**.
+1.  Open `-Vision-Based-Monitoring-Robot/worlds/elevator_lobby.wbt` in **Webots**.
 2.  **Build** both C controllers (`epuck_fsm_controller` and `epuck_camera_stationary`).
 3.  Press **Play** (▶).
 4.  Use the keyboard controls (click inside the 3D view first):
