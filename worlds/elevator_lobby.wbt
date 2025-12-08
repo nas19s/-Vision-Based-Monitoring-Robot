@@ -3,6 +3,11 @@
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackground.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/robots/gctronic/e-puck/protos/E-puck.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/appearances/protos/Parquetry.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/appearances/protos/Roughcast.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/plants/protos/PottedTree.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/street_furniture/protos/Bench.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/appearances/protos/BrushedAluminium.proto"
 
 WorldInfo {
   info [
@@ -11,24 +16,55 @@ WorldInfo {
   ]
   title "Elevator Lobby - EV Safety Monitor"
   basicTimeStep 16
+  contactProperties [
+    ContactProperties {
+      material1 "puck_rim"
+      material2 "floor"
+      coulombFriction [
+        0.5
+      ]
+    }
+  ]
 }
 Viewpoint {
-  orientation 0.0654562852994306 0.060875001503013525 -0.9959968418156795 1.6472927178383614
-  position 1.1106780991421232 17.11450810276749 3.113630498857253
+  orientation 0.04369251560913299 0.04539807133723934 -0.9980130155456916 1.6116269224335809
+  position 0.39527870201981924 15.218788523426777 2.818642836299235
 }
 TexturedBackground {
   texture "empty_office"
 }
 TexturedBackgroundLight {
 }
+PointLight {
+  attenuation 0 0 1
+  color 1 0.98 0.9
+  intensity 10
+  location -1.8 -2 2.5
+  castShadows TRUE
+}
+PointLight {
+  attenuation 0 0 1
+  color 1 0.98 0.9
+  intensity 10
+  location 1.8 -2 2.5
+  castShadows TRUE
+}
+PointLight {
+  attenuation 0 0 1
+  color 0.9 0.95 1
+  intensity 8
+  location 0 2 2.8
+  castShadows TRUE
+}
 Solid {
   translation 0 0 -0.01
   children [
     Shape {
-      appearance PBRAppearance {
-        baseColor 0.85 0.83 0.8
-        roughness 0.3
-        metalness 0.05
+      appearance Parquetry {
+        type "chequered"
+        textureTransform TextureTransform {
+          scale 4 3
+        }
       }
       geometry Box {
         size 10 8 0.02
@@ -40,46 +76,14 @@ Solid {
     size 10 8 0.02
   }
 }
-DEF RestrictedZone Solid {
-  translation 0 -2.5 0.001
-  children [
-    Shape {
-      appearance PBRAppearance {
-        baseColor 0.8 0.1 0.1
-        transparency 0.3
-        roughness 0.5
-        metalness 0
-      }
-      geometry Box {
-        size 6 2 0.01
-      }
-    }
-  ]
-  name "restricted_zone"
-}
-Solid {
-  translation 0 -1.5 0.002
-  children [
-    Shape {
-      appearance PBRAppearance {
-        baseColor 1 0.8 0
-        roughness 0.6
-      }
-      geometry Box {
-        size 6 0.1 0.01
-      }
-    }
-  ]
-  name "warning_stripe"
-}
 Solid {
   translation 0 -3.9 1.5
   children [
     Shape {
-      appearance PBRAppearance {
-        baseColor 0.92 0.9 0.87
-        roughness 0.6
-        metalness 0
+      appearance Roughcast {
+        textureTransform TextureTransform {
+          scale 4 1
+        }
       }
       geometry Box {
         size 10 0.2 3
@@ -95,9 +99,10 @@ Solid {
   translation -4.9 0 1.5
   children [
     Shape {
-      appearance PBRAppearance {
-        baseColor 0.92 0.9 0.87
-        roughness 0.5
+      appearance Roughcast {
+        textureTransform TextureTransform {
+          scale 3 2
+        }
       }
       geometry Box {
         size 0.2 8 3
@@ -113,9 +118,10 @@ Solid {
   translation 4.9 0 1.5
   children [
     Shape {
-      appearance PBRAppearance {
-        baseColor 0.92 0.9 0.87
-        roughness 0.5
+      appearance Roughcast {
+        textureTransform TextureTransform {
+          scale 3 2
+        }
       }
       geometry Box {
         size 0.2 8 3
@@ -131,8 +137,10 @@ Solid {
   translation 0 0 3
   children [
     Shape {
-      appearance PBRAppearance {
-        roughness 0.9
+      appearance Roughcast {
+        textureTransform TextureTransform {
+          scale 5 5
+        }
       }
       geometry Box {
         size 10 8 0.05
@@ -141,6 +149,40 @@ Solid {
   ]
   name "ceiling"
 }
+DEF RestrictedZone Solid {
+  translation 0 -2.5 0.001
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.8 0.1 0.1
+        transparency 0.4
+        roughness 0.5
+        metalness 0
+        emissiveColor 0.2 0 0
+      }
+      geometry Box {
+        size 6 2 0.01
+      }
+    }
+  ]
+  name "restricted_zone"
+}
+Solid {
+  translation 0 -1.5 0.002
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 1 0.8 0
+        roughness 0.6
+        emissiveColor 0.2 0.15 0
+      }
+      geometry Box {
+        size 6 0.1 0.01
+      }
+    }
+  ]
+  name "warning_stripe"
+}
 Solid {
   translation -1.8 -3.75 1.25
   children [
@@ -148,9 +190,9 @@ Solid {
       translation 0 0 1.15
       children [
         Shape {
-          appearance DEF STEEL PBRAppearance {
-            baseColor 0.6 0.62 0.65
-            roughness 0.3
+          appearance DEF BRUSHED_STEEL PBRAppearance {
+            baseColor 0.7 0.72 0.75
+            roughness 0.2
             metalness 0.8
           }
           geometry Box {
@@ -164,7 +206,7 @@ Solid {
       translation -0.75 0 0
       children [
         Shape {
-          appearance USE STEEL
+          appearance USE BRUSHED_STEEL
           geometry Box {
             size 0.1 0.1 2.4
           }
@@ -176,7 +218,7 @@ Solid {
       translation 0.75 0 0
       children [
         Shape {
-          appearance USE STEEL
+          appearance USE BRUSHED_STEEL
           geometry Box {
             size 0.1 0.1 2.4
           }
@@ -214,7 +256,7 @@ Solid {
       translation 0 0 1.15
       children [
         Shape {
-          appearance USE STEEL
+          appearance USE BRUSHED_STEEL
           geometry Box {
             size 1.6 0.1 0.1
           }
@@ -226,7 +268,7 @@ Solid {
       translation -0.75 0 0
       children [
         Shape {
-          appearance USE STEEL
+          appearance USE BRUSHED_STEEL
           geometry Box {
             size 0.1 0.1 2.4
           }
@@ -238,7 +280,7 @@ Solid {
       translation 0.75 0 0
       children [
         Shape {
-          appearance USE STEEL
+          appearance USE BRUSHED_STEEL
           geometry Box {
             size 0.1 0.1 2.4
           }
@@ -270,7 +312,7 @@ Solid {
   }
 }
 Robot {
-  translation -2.15 -3.7 1.2
+  translation -2.1 -3.7 1.2
   children [
     SliderJoint {
       jointParameters JointParameters {
@@ -279,27 +321,33 @@ Robot {
       device [
         LinearMotor {
           name "door_motor_1L"
-          maxVelocity 0.5
+          maxVelocity 0.3
           minPosition -0.55
         }
+        PositionSensor {
+          name "door_sensor_1L"
+        }
       ]
-      endPoint Solid {
+      endPoint DEF DOOR_1L Solid {
         children [
           Shape {
-            appearance DEF DOOR_METAL PBRAppearance {
-              baseColor 0.75 0.77 0.8
-              roughness 0.2
-              metalness 0.9
+            appearance DEF DOOR_METAL BrushedAluminium {
+              textureTransform TextureTransform {
+                rotation 1.5708
+              }
             }
             geometry Box {
-              size 0.6 0.05 2.3
+              size 0.65 0.05 2.3
             }
           }
         ]
+        name "door_1L_solid"
         boundingObject Box {
-          size 0.6 0.05 2.3
+          size 0.65 0.05 2.3
         }
         physics Physics {
+          density -1
+          mass 50
         }
       }
     }
@@ -308,7 +356,7 @@ Robot {
   controller "<none>"
 }
 Robot {
-  translation -1.45 -3.7 1.2
+  translation -1.5 -3.7 1.2
   children [
     SliderJoint {
       jointParameters JointParameters {
@@ -317,23 +365,29 @@ Robot {
       device [
         LinearMotor {
           name "door_motor_1R"
-          maxVelocity 0.5
+          maxVelocity 0.3
           maxPosition 0.55
         }
+        PositionSensor {
+          name "door_sensor_1R"
+        }
       ]
-      endPoint Solid {
+      endPoint DEF DOOR_1R Solid {
         children [
           Shape {
             appearance USE DOOR_METAL
             geometry Box {
-              size 0.6 0.05 2.3
+              size 0.65 0.05 2.3
             }
           }
         ]
+        name "door_1R_solid"
         boundingObject Box {
-          size 0.6 0.05 2.3
+          size 0.65 0.05 2.3
         }
         physics Physics {
+          density -1
+          mass 50
         }
       }
     }
@@ -342,7 +396,7 @@ Robot {
   controller "<none>"
 }
 Robot {
-  translation 1.45 -3.7 1.2
+  translation 1.5 -3.7 1.2
   children [
     SliderJoint {
       jointParameters JointParameters {
@@ -351,23 +405,29 @@ Robot {
       device [
         LinearMotor {
           name "door_motor_2L"
-          maxVelocity 0.5
+          maxVelocity 0.3
           minPosition -0.55
         }
+        PositionSensor {
+          name "door_sensor_2L"
+        }
       ]
-      endPoint Solid {
+      endPoint DEF DOOR_2L Solid {
         children [
           Shape {
             appearance USE DOOR_METAL
             geometry Box {
-              size 0.6 0.05 2.3
+              size 0.65 0.05 2.3
             }
           }
         ]
+        name "door_2L_solid"
         boundingObject Box {
-          size 0.6 0.05 2.3
+          size 0.65 0.05 2.3
         }
         physics Physics {
+          density -1
+          mass 50
         }
       }
     }
@@ -376,7 +436,7 @@ Robot {
   controller "<none>"
 }
 Robot {
-  translation 2.15 -3.7 1.2
+  translation 2.1 -3.7 1.2
   children [
     SliderJoint {
       jointParameters JointParameters {
@@ -385,23 +445,29 @@ Robot {
       device [
         LinearMotor {
           name "door_motor_2R"
-          maxVelocity 0.5
+          maxVelocity 0.3
           maxPosition 0.55
         }
+        PositionSensor {
+          name "door_sensor_2R"
+        }
       ]
-      endPoint Solid {
+      endPoint DEF DOOR_2R Solid {
         children [
           Shape {
             appearance USE DOOR_METAL
             geometry Box {
-              size 0.6 0.05 2.3
+              size 0.65 0.05 2.3
             }
           }
         ]
+        name "door_2R_solid"
         boundingObject Box {
-          size 0.6 0.05 2.3
+          size 0.65 0.05 2.3
         }
         physics Physics {
+          density -1
+          mass 50
         }
       }
     }
@@ -409,13 +475,118 @@ Robot {
   name "elevator2_door_right"
   controller "<none>"
 }
+DEF Elevator1LEDSign Solid {
+  translation -1.8 -3.62 2.65
+  children [
+    Shape {
+      appearance DEF SIGN_FRAME PBRAppearance {
+        baseColor 0.1 0.1 0.1
+        roughness 0.4
+        metalness 0.9
+      }
+      geometry Box {
+        size 0.9 0.03 0.3
+      }
+    }
+    Pose {
+      translation 0 0.02 0
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 0 0 0
+            roughness 0.2
+            metalness 0.8
+          }
+          geometry Box {
+            size 0.82 0.01 0.22
+          }
+        }
+      ]
+    }
+    Pose {
+      translation -0.28 0.025 0
+      children [
+        Shape {
+          appearance DEF LED_TEXT PBRAppearance {
+            baseColor 0.2 0.8 1
+            transparency 0.1
+            emissiveColor 0.3 0.9 1
+          }
+        }
+      ]
+    }
+    Pose {
+      translation 0.35 0.025 0
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 0 1 0.5
+            emissiveColor 0 0.8 0.4
+          }
+          geometry Sphere {
+            radius 0.02
+          }
+        }
+      ]
+    }
+  ]
+  name "elevator1_led_sign"
+}
+DEF Elevator2LEDSign Solid {
+  translation 1.8 -3.62 2.65
+  children [
+    Shape {
+      appearance USE SIGN_FRAME
+      geometry Box {
+        size 0.9 0.03 0.3
+      }
+    }
+    Pose {
+      translation 0 0.02 0
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 0 0 0
+            roughness 0.2
+            metalness 0.8
+          }
+          geometry Box {
+            size 0.82 0.01 0.22
+          }
+        }
+      ]
+    }
+    Pose {
+      translation -0.28 0.025 0
+      children [
+        Shape {
+        }
+      ]
+    }
+    Pose {
+      translation 0.35 0.025 0
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 0 1 0.5
+            emissiveColor 0 0.8 0.4
+          }
+          geometry Sphere {
+            radius 0.02
+          }
+        }
+      ]
+    }
+  ]
+  name "elevator2_led_sign"
+}
 Solid {
   translation -1.8 -4.3 1.2
   children [
     Shape {
       appearance PBRAppearance {
-        baseColor 0.2 0.2 0.22
-        roughness 0.5
+        baseColor 0.3 0.3 0.35
+        roughness 0.4
       }
       geometry Box {
         size 1.4 1 2.4
@@ -429,8 +600,8 @@ Solid {
   children [
     Shape {
       appearance PBRAppearance {
-        baseColor 0.2 0.2 0.22
-        roughness 0.5
+        baseColor 0.3 0.3 0.35
+        roughness 0.4
       }
       geometry Box {
         size 1.4 1 2.4
@@ -438,24 +609,6 @@ Solid {
     }
   ]
   name "elevator2_interior"
-}
-PointLight {
-  attenuation 0 0 1
-  color 1 0.98 0.95
-  intensity 5
-  location -1.8 -2 2.8
-}
-PointLight {
-  attenuation 0 0 1
-  color 1 0.98 0.95
-  intensity 5
-  location 1.8 -2 2.8
-}
-PointLight {
-  attenuation 0 0 1
-  color 1 0.98 0.95
-  intensity 4
-  location 0 2 2.8
 }
 Solid {
   translation -1.8 -2 2.95
@@ -485,57 +638,21 @@ Solid {
   ]
   name "light_fixture_2"
 }
-Solid {
-  translation 3.5 1 0.25
-  children [
-    Shape {
-      appearance PBRAppearance {
-        baseColor 0.25 0.25 0.28
-        roughness 0.4
-        metalness 0.3
-      }
-      geometry Box {
-        size 0.5 2 0.08
-      }
-    }
-    Solid {
-      translation 0 -0.8 -0.2
-      children [
-        Shape {
-          appearance USE STEEL
-          geometry Box {
-            size 0.4 0.05 0.4
-          }
-        }
-      ]
-      name "leg1"
-    }
-    Solid {
-      translation 0 0.8 -0.2
-      children [
-        Shape {
-          appearance USE STEEL
-          geometry Box {
-            size 0.4 0.05 0.4
-          }
-        }
-      ]
-      name "leg2"
-    }
-  ]
-  name "lobby_bench"
-  boundingObject Box {
-    size 0.5 2 0.5
-  }
+Bench {
+  translation 3.5 1 0
+  rotation 0 0 1 3.14159
+}
+PottedTree {
+  translation 0.89 2.66 0
 }
 Solid {
   translation -2 -1 0.15
   children [
     Shape {
       appearance PBRAppearance {
-        baseColor 0.6 0.6 0.6
-        roughness 0.5
-        metalness 0.2
+        baseColor 0.6 0.6 0.65
+        roughness 0.1
+        metalness 0.8
       }
       geometry Cylinder {
         height 0.3
@@ -549,6 +666,8 @@ Solid {
     radius 0.12
   }
   physics Physics {
+    density -1
+    mass 10
   }
 }
 Solid {
@@ -556,9 +675,9 @@ Solid {
   children [
     Shape {
       appearance PBRAppearance {
-        baseColor 0.6 0.6 0.6
-        roughness 0.5
-        metalness 0.2
+        baseColor 0.6 0.6 0.65
+        roughness 0.1
+        metalness 0.8
       }
       geometry Cylinder {
         height 0.3
@@ -572,6 +691,8 @@ Solid {
     radius 0.12
   }
   physics Physics {
+    density -1
+    mass 10
   }
 }
 Solid {
@@ -581,6 +702,7 @@ Solid {
       appearance PBRAppearance {
         baseColor 0.5 0.4 0.3
         roughness 0.7
+        name "cardboard"
       }
       geometry Box {
         size 0.2 0.2 0.2
@@ -592,6 +714,8 @@ Solid {
     size 0.2 0.2 0.2
   }
   physics Physics {
+    density -1
+    mass 2
   }
 }
 Solid {
@@ -600,8 +724,8 @@ Solid {
     Shape {
       appearance PBRAppearance {
         baseColor 0.55 0.55 0.58
-        roughness 0.5
-        metalness 0.3
+        roughness 0.2
+        metalness 0.5
       }
       geometry Cylinder {
         height 0.3
@@ -615,75 +739,250 @@ Solid {
     radius 0.1
   }
   physics Physics {
+    density -1
+    mass 8
   }
 }
-Solid {
-  translation -1 -0.6 0.125
+DEF GreenPillar Solid {
+  translation 0.35 2.66 0.5
   children [
     Shape {
       appearance PBRAppearance {
-        baseColor 1 0.5 0
-        roughness 0.6
-        emissiveColor 0.2 0.1 0
-      }
-      geometry Cone {
-        bottomRadius 0.1
-        height 0.25
-      }
-    }
-  ]
-  name "obstacle_cone_1"
-  boundingObject Cylinder {
-    height 0.25
-    radius 0.1
-  }
-  physics Physics {
-  }
-}
-Solid {
-  translation -3.5 2.5 0.35
-  children [
-    Shape {
-      appearance PBRAppearance {
-        baseColor 0.35 0.35 0.38
-        roughness 0.6
+        baseColor 0 1 0
+        roughness 0.3
+        emissiveColor 0 0.5 0
       }
       geometry Cylinder {
-        height 0.5
-        radius 0.25
+        height 1
+        radius 0.15
       }
     }
-    Solid {
-      translation 0 0 0.5
-      children [
-        Shape {
-          appearance PBRAppearance {
-            baseColor 0.2 0.5 0.2
-            roughness 0.8
-          }
-          geometry Sphere {
-            radius 0.4
-          }
-        }
-      ]
-      name "foliage"
-    }
   ]
-  name "plant"
+  name "green_pillar"
   boundingObject Cylinder {
-    height 0.5
-    radius 0.25
+    height 1
+    radius 0.15
   }
 }
+DEF NonEVVehicle Robot {
+  translation -1.42 0.9 0.9
+  rotation 0 0 1 -1.5708
+  children [
+    Solid {
+      translation 0 0 0.65
+      children [
+        Shape {
+          appearance DEF ROBOT_METAL PBRAppearance {
+            baseColor 0.7 0.75 0.8
+            roughness 0.3
+            metalness 0.8
+          }
+          geometry Box {
+            size 0.2 0.22 0.25
+          }
+        }
+        Solid {
+          translation 0.11 0.05 0.02
+          children [
+            Shape {
+              appearance PBRAppearance {
+                baseColor 0.1 0.1 0.1
+                roughness 0.1
+                metalness 0.9
+              }
+              geometry Box {
+                size 0.01 0.05 0.02
+              }
+            }
+          ]
+          name "eye_left"
+        }
+        Solid {
+          translation 0.11 -0.05 0.02
+          children [
+            Shape {
+              appearance PBRAppearance {
+                baseColor 0.1 0.1 0.1
+                roughness 0.1
+                metalness 0.9
+              }
+              geometry Box {
+                size 0.01 0.05 0.02
+              }
+            }
+          ]
+          name "eye_right"
+        }
+      ]
+      name "head"
+    }
+    Solid {
+      translation 0 0 0.2
+      children [
+        Shape {
+          appearance USE ROBOT_METAL
+          geometry Box {
+            size 0.25 0.45 0.6
+          }
+        }
+        Solid {
+          translation -0.13 0 0.1
+          children [
+            Shape {
+              appearance DEF GLOW_ORANGE PBRAppearance {
+                baseColor 1 0.5 0
+                transparency 0.1
+                emissiveColor 1 0.3 0
+              }
+              geometry Box {
+                size 0.05 0.25 0.35
+              }
+            }
+            PointLight {
+              attenuation 0 0 1
+              color 1 0.4 0
+              intensity 4
+              location -0.2 0 0
+              radius 2
+            }
+          ]
+          name "back_power_pack"
+        }
+      ]
+      name "torso"
+    }
+    Solid {
+      translation 0 -0.28 0.2
+      children [
+        Shape {
+          appearance USE ROBOT_METAL
+          geometry Cylinder {
+            height 0.6
+            radius 0.06
+          }
+        }
+        Solid {
+          translation 0 0 -0.35
+          children [
+            Shape {
+              appearance PBRAppearance {
+                baseColor 0.2 0.2 0.2
+                roughness 0.5
+              }
+              geometry Sphere {
+                radius 0.07
+              }
+            }
+          ]
+          name "hand_right"
+        }
+      ]
+      name "arm_right"
+    }
+    Solid {
+      translation 0 0.28 0.2
+      children [
+        Shape {
+          appearance USE ROBOT_METAL
+          geometry Cylinder {
+            height 0.6
+            radius 0.06
+          }
+        }
+        Solid {
+          translation 0 0 -0.35
+          children [
+            Shape {
+              appearance PBRAppearance {
+                baseColor 0.2 0.2 0.2
+                roughness 0.5
+              }
+              geometry Sphere {
+                radius 0.07
+              }
+            }
+          ]
+          name "hand_left"
+        }
+      ]
+      name "arm_left"
+    }
+    Solid {
+      translation 0 -0.12 -0.45
+      children [
+        Shape {
+          appearance USE ROBOT_METAL
+          geometry Box {
+            size 0.15 0.15 0.8
+          }
+        }
+        Solid {
+          translation 0.05 0 -0.4
+          children [
+            Shape {
+              appearance PBRAppearance {
+                baseColor 0.1 0.1 0.1
+              }
+              geometry Box {
+                size 0.25 0.16 0.1
+              }
+            }
+          ]
+          name "foot_right"
+        }
+      ]
+      name "leg_right"
+    }
+    Solid {
+      translation 0 0.12 -0.45
+      children [
+        Shape {
+          appearance USE ROBOT_METAL
+          geometry Box {
+            size 0.15 0.15 0.8
+          }
+        }
+        Solid {
+          translation 0.05 0 -0.4
+          children [
+            Shape {
+              appearance PBRAppearance {
+                baseColor 0.1 0.1 0.1
+              }
+              geometry Box {
+                size 0.25 0.16 0.1
+              }
+            }
+          ]
+          name "foot_left"
+        }
+      ]
+      name "leg_left"
+    }
+  ]
+  name "NonEVVehicle"
+  boundingObject Box {
+    size 0.4 0.6 1.8
+  }
+  physics Physics {
+    density -1
+    mass 80
+    centerOfMass [
+      0 0 0
+    ]
+  }
+  controller "<none>"
+}
 DEF ElectricVehicle Robot {
-  translation -0.5000000037431516 0.9000001103555932 0.12401899999294337
-  rotation -1.620419477726867e-10 -1.6204386283655796e-10 -1 1.570799946389911
+  translation -0.329996 2.36 0.13
+  rotation 0 0 1 -1.5708
   children [
     Shape {
       appearance PBRAppearance {
-        baseColor 0.1 0.6 0.1
-        roughness 0.3
-        metalness 0.4
+        baseColor 0.05 0.4 0.05
+        roughness 0.2
+        metalness 0.7
+        name "evGreenPaint"
       }
       geometry Box {
         size 0.6 0.4 0.25
@@ -695,6 +994,7 @@ DEF ElectricVehicle Robot {
         Shape {
           appearance PBRAppearance {
             baseColor 0 1 0
+            transparency 0.1
             emissiveColor 0 1 0
           }
           geometry Box {
@@ -770,12 +1070,12 @@ DEF ElectricVehicle Robot {
       children [
         Shape {
           appearance PBRAppearance {
-            baseColor 0.15 0.15 0.15
-            roughness 0.8
+            baseColor 0.1 0.1 0.1
+            roughness 0.7
           }
           geometry Cylinder {
-            height 0.05
-            radius 0.08
+            height 0.1
+            radius 0.16
           }
         }
       ]
@@ -787,12 +1087,12 @@ DEF ElectricVehicle Robot {
       children [
         Shape {
           appearance PBRAppearance {
-            baseColor 0.15 0.15 0.15
-            roughness 0.8
+            baseColor 0.1 0.1 0.1
+            roughness 0.7
           }
           geometry Cylinder {
-            height 0.05
-            radius 0.08
+            height 0.1
+            radius 0.16
           }
         }
       ]
@@ -804,12 +1104,12 @@ DEF ElectricVehicle Robot {
       children [
         Shape {
           appearance PBRAppearance {
-            baseColor 0.15 0.15 0.15
-            roughness 0.8
+            baseColor 0.1 0.1 0.1
+            roughness 0.7
           }
           geometry Cylinder {
-            height 0.05
-            radius 0.08
+            height 0.1
+            radius 0.16
           }
         }
       ]
@@ -821,12 +1121,12 @@ DEF ElectricVehicle Robot {
       children [
         Shape {
           appearance PBRAppearance {
-            baseColor 0.15 0.15 0.15
-            roughness 0.8
+            baseColor 0.1 0.1 0.1
+            roughness 0.7
           }
           geometry Cylinder {
-            height 0.05
-            radius 0.08
+            height 0.1
+            radius 0.16
           }
         }
       ]
@@ -853,6 +1153,7 @@ DEF ElectricVehicle Robot {
     size 0.6 0.4 0.25
   }
   physics Physics {
+    density -1
     mass 5
   }
   controller "<none>"
@@ -862,8 +1163,8 @@ DEF WallAlarmLight Robot {
   children [
     Shape {
       appearance PBRAppearance {
-        baseColor 0.3 0.3 0.3
-        roughness 0.5
+        baseColor 0.1 0.1 0.1
+        roughness 0.3
         metalness 0.8
       }
       geometry Box {
@@ -896,11 +1197,48 @@ DEF WallAlarmLight Robot {
   name "wall_alarm_light"
   controller "<none>"
 }
+DEF CameraAlarmLight Robot {
+  translation 3.5 -3.5 2.2
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.1 0.1 0.1
+        roughness 0.3
+        metalness 0.8
+      }
+      geometry Box {
+        size 0.3 0.15 0.3
+      }
+    }
+    DEF CAMERA_LIGHT_VISUAL Pose {
+      translation 0 0.08 0
+      children [
+        Shape {
+          appearance DEF CAMERA_LIGHT_APPEARANCE PBRAppearance {
+            baseColor 0 0 0.3
+            roughness 0.3
+            metalness 0
+          }
+          geometry Sphere {
+            radius 0.1
+          }
+        }
+      ]
+    }
+    PointLight {
+      attenuation 0 0 1
+      color 0 0.5 1
+      intensity 0
+      location 0 0.15 0
+      radius 5
+    }
+  ]
+  name "camera_alarm_light"
+  controller "<none>"
+}
 DEF PatrolRobot E-puck {
-  hidden position_0_0 -1.326302860106286e-08
-  hidden position_0_1 1.326303308597289e-08
-  translation 3.129999999999999 -1.7199999999999958 -2.7978437631396083e-05
-  rotation -7.573053985398147e-15 1.3995372130263318e-09 1 -3.1415900000000114
+  translation 3.13 -1.72 0
+  rotation 0 0 1 3.14159
   name "camera_monitor"
   controller "epuck_fsm_controller"
   version "2"
@@ -919,11 +1257,40 @@ DEF PatrolRobot E-puck {
     }
   ]
 }
+DEF PatrolRobot2 E-puck {
+  translation -3.13 -1.72 0
+  rotation 0 0 1 -0.13
+  name "camera_monitor_2"
+  controller "epuck_camera_stationary"
+  version "2"
+  camera_width 128
+  camera_height 128
+  emitter_channel 2
+  turretSlot [
+    Emitter {
+      name "cam2_emitter"
+      channel 2
+    }
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.1 0.1 0.8
+        emissiveColor 0 0 0.3
+      }
+      geometry Cylinder {
+        height 0.01
+        radius 0.025
+      }
+    }
+  ]
+}
 DEF VPE_Supervisor Robot {
   translation 0 0 0.01
   children [
     Emitter {
       channel 1
+    }
+    Receiver {
+      channel 2
     }
   ]
   name "vpe_supervisor"
