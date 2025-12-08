@@ -1,4 +1,6 @@
-# Elevator Safety & EV Access Control System
+# Vision-Based High-Priority Reactive Monitoring Robot
+### Application: Elevator Safety & EV Access Control System
+
 
 This Webots project simulates an autonomous safety monitoring system for an elevator lobby. We designed this system to address the specific fire safety risks associated with lithium-ion batteries in enclosed spaces. The goal is simple in concept but technically complex to execute: **allow humans to use the elevator, but actively block and lock out Electric Vehicles (Green EVs).**
 
