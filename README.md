@@ -34,7 +34,7 @@ This is the primary agent. We implemented a **Finite State Machine (FSM)** integ
 *   **Vision Pipeline: "Spatial Context Validation"**
     We realised that relying solely on colour thresholding would lead to failure in a real environment. To fix this, we wrote a multi-stage filter:
     1.  **Chassis Detection:** Identifies the "Centre of Mass" of green pixels.
-    2.  **Wheel Search:** Scans specifically for high-density dark pixels in the lower 30% of the object.
+    2.  **Wheel Search:** Scans specifically for high-density dark pixels in the lower third of the object.
     3.  **Dynamic Revalidation (The "Force Release" Logic):**
         This is our key contribution to reliability. The robot continuously re-evaluates the target *during* the pursuit. If the target loses its vehicle characteristics (e.g., if the robot gets closer and realises the object has **Zero Black Pixels**), it triggers a **Force Release**. The robot immediately aborts the pursuit and resumes patrolling.
 
