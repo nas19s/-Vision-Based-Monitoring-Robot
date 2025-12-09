@@ -189,6 +189,8 @@ static int cam_width, cam_height;
 static RobotState current_state = STATE_PATROL;
 static RobotState previous_state = STATE_PATROL; 
 
+static int pursuit_failures = 0;
+static int lock_timeouts = 0;
 static int scan_timer = 0;
 static int scan_counter = 0;
 static int lost_target_counter = 0;
@@ -472,6 +474,21 @@ void release_target_lock(const char* reason) {
     if (target_lock.is_locked) {
         double duration = wb_robot_get_time() - target_lock.lock_time;
         printf("[LOCK] *** LOCK RELEASED *** after %.1fs. Reason: %s\n", duration, reason);
+        
+        
+        if (fp) {
+            fprintf(fp, "%.2f,LOCK_RELEASED,,,%.1fs,,%s\n",
+                    wb_robot_get_time(), duration, reason);
+            fflush(fp);
+        }
+        
+        
+        if (strstr(reason, "PILLAR") != NULL) {
+            pillar_rejections++;
+        } else if (strstr(reason, "lost") != NULL) {
+            lock_timeouts++;
+        }
+        pursuit_failures++;
     }
 
     target_lock.is_locked = false;
