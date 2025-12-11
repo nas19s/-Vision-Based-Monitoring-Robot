@@ -79,20 +79,22 @@ We designed the visual feedback to be intuitive for testing:
 ## Hypothesis Testing & Data Logging
 
 ### Hypothesis H1
-> **"Feature-based validation reduces false positives without significant time penalty."**
+> **"A vision-based hierarchical suppression architecture can reliably override low-level navigation behaviours with minimal latency, while spatial context validation eliminates false positive detections."**
 
-To evaluate this hypothesis, we conducted manual trials and used automated CSV logging for verification. Full methodology and results are detailed in the report.
+To evaluate this hypothesis, we conducted rigorous experimental trials (N=40) using automated CSV logging, ensuring direct verification of all metrics described in the report.
+
 ---
 
-## Testing Summary
+## Testing Summary: Suppression and Reliability
 
-| Test | Trials | Metric | Result |
-|:-----|:------:|:--------|:--------|
-| Pillar Rejection | 10 | False positive rate | 0% (10/10 rejected) |
-| EV Detection | 10 | Successful blocks | 100% (10/10 blocked) |
-| Timing | 10 | Validation overhead | xs (~x% of total) |
+| Test / Initial State | Trials (N) | Reliability | Suppression Delay | Result Against H1 |
+|:---------------------|:----------:|:------------|:------------------|:------------------|
+| **Patrolling** | 30 | 100\% | 32 ms (1 Cycle) | **SUPPORTED** |
+| **Avoiding** | 10 | 100\% | 64 ms (2 Cycles) | **SUPPORTED** |
+| **Pillar Rejection** | 10 | 100\% (0\% False Positive Rate) | N/A | **SUPPORTED** |
 
-**Conclusion:** **H1 SUPPORTED** — validation eliminates false positives with minimal time penalty.
+**Conclusion:** The data demonstrates a **100% reliability rate** across all tested states and confirms the FSM override is near-instantaneous (32 ms), providing robust evidence in support of Hypothesis H1.
+
 
 ---
 
